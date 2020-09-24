@@ -1,7 +1,5 @@
 import Prismic from 'prismic-javascript'
 
-require('dotenv').config();
-
 export const apiEndpoint = 'https://jadepiol.cdn.prismic.io/api/v2'
 export const accessToken = process.env.PRISMIC_ACCESS_TOKEN
 

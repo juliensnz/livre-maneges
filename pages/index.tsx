@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import styled from 'styled-components'
 
-import { Client } from './prismic-configuration'
+import { Client } from '../prismic-configuration'
 
 const Container = styled.div`
   display: flex;
