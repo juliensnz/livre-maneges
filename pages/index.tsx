@@ -76,7 +76,7 @@ const Home = ({elements}: HomeProps) => {
         <Title>{elements.title[0].text}</Title>
       </Header>
       <Menu>
-          <MenuItem href="mailto:pioljade@yahoo.fr?subject=Bonjour%20Jade">Contact</MenuItem>
+          <MenuItem href="mailto:bonjour@jadepiol.com?subject=Bonjour%20Jade">Contact</MenuItem>
         </Menu>
       <Content>
         <Subtitle>{elements.subtitle[0].text}</Subtitle>
