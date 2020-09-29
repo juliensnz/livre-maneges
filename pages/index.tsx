@@ -1,9 +1,13 @@
+import React from 'react';
 import {GetStaticPropsContext} from 'next';
 import Link from 'next/link';
 
 import styled from 'styled-components';
 
 import {Client} from '../prismic-configuration';
+import {LeafCollection} from '../component/Leaf';
+import {useElementSize} from '../hook/useElementSize';
+import {useLeafPoints} from '../hook/useLeafPoints';
 
 const Container = styled.div`
   display: flex;
@@ -20,15 +24,16 @@ const Title = styled.h1`
   font-size: 24px;
   margin: 38px 0;
 
-  font-family: 'Playfair Display';
+  font-family: 'Playfair Display', 'Times New Roman', Times, serif;
 `;
 const Subtitle = styled.h2`
-  font-family: 'Playfair Display';
+  font-family: 'Playfair Display', 'Times New Roman', Times, serif;
   font-weight: normal;
   font-size: 13vw;
   text-transform: uppercase;
   margin-left: 120px;
   margin-top: 160px;
+  position: absolute;
 `;
 const Menu = styled.div`
   margin: 45px 45px 0 0;
@@ -53,8 +58,19 @@ const Footer = styled.footer`
     text-transform: uppercase;
   }
 `;
+const Canvas = styled.canvas`
+  overflow: visible;
+  margin-left: 120px;
+  margin-top: 160px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+`;
 
-const Content = styled.div``;
+const Content = styled.div`
+  position: relative;
+`;
 
 type PrismicElement = {
   type: string;
@@ -70,6 +86,9 @@ type HomeProps = {
 };
 
 const Home = ({elements}: HomeProps) => {
+  const [subtitleRef, subtitleSize] = useElementSize();
+  const [canvasRef, leafPoints] = useLeafPoints(subtitleSize, elements.subtitle[0].text);
+
   return (
     <Container>
       <Header>
@@ -79,7 +98,9 @@ const Home = ({elements}: HomeProps) => {
         <MenuItem href="mailto:bonjour@jadepiol.com?subject=Bonjour%20Jade">Contact</MenuItem>
       </Menu>
       <Content>
-        <Subtitle>{elements.subtitle[0].text}</Subtitle>
+        <Subtitle ref={subtitleRef}>{elements.subtitle[0].text}</Subtitle>
+        <LeafCollection leafPoints={leafPoints} size={subtitleSize} />
+        <Canvas ref={canvasRef} width={`${subtitleSize.width}px`} height={`${subtitleSize.height}px`}></Canvas>
       </Content>
     </Container>
   );
