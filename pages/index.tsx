@@ -25,7 +25,7 @@ const Title = styled.h1`
 const Subtitle = styled.h2`
   font-family: 'Playfair Display';
   font-weight: normal;
-  font-size: 144px;
+  font-size: 13vw;
   text-transform: uppercase;
   margin-left: 120px;
   margin-top: 160px;
