@@ -1,17 +1,17 @@
-import {GetStaticPropsContext} from 'next'
-import Link from 'next/link'
+import {GetStaticPropsContext} from 'next';
+import Link from 'next/link';
 
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-import { Client } from '../prismic-configuration'
+import {Client} from '../prismic-configuration';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 const Header = styled.header`
   display: flex;
-`
+`;
 const Title = styled.h1`
   flex: 1;
   text-align: center;
@@ -21,7 +21,7 @@ const Title = styled.h1`
   margin: 38px 0;
 
   font-family: 'Playfair Display';
-`
+`;
 const Subtitle = styled.h2`
   font-family: 'Playfair Display';
   font-weight: normal;
@@ -29,20 +29,20 @@ const Subtitle = styled.h2`
   text-transform: uppercase;
   margin-left: 120px;
   margin-top: 160px;
-`
+`;
 const Menu = styled.div`
   margin: 45px 45px 0 0;
   position: absolute;
   top: 0;
   right: 0;
-`
+`;
 const MenuItem = styled.a`
   line-height: 20px;
   font-family: 'Raleway';
   text-transform: uppercase;
   text-decoration: none;
   color: inherit;
-`
+`;
 const Footer = styled.footer`
   display: flex;
   justify-content: center;
@@ -52,22 +52,22 @@ const Footer = styled.footer`
     line-height: 26px;
     text-transform: uppercase;
   }
-`
+`;
 
-const Content = styled.div``
+const Content = styled.div``;
 
 type PrismicElement = {
-  type: string,
-  text: string,
-  spans: any[]
-}
+  type: string;
+  text: string;
+  spans: any[];
+};
 
 type HomeProps = {
   elements: {
-    title: [PrismicElement],
-    subtitle: [PrismicElement]
-  }
-}
+    title: [PrismicElement];
+    subtitle: [PrismicElement];
+  };
+};
 
 const Home = ({elements}: HomeProps) => {
   return (
@@ -76,23 +76,25 @@ const Home = ({elements}: HomeProps) => {
         <Title>{elements.title[0].text}</Title>
       </Header>
       <Menu>
-          <MenuItem href="mailto:bonjour@jadepiol.com?subject=Bonjour%20Jade">Contact</MenuItem>
-        </Menu>
+        <MenuItem href="mailto:bonjour@jadepiol.com?subject=Bonjour%20Jade">Contact</MenuItem>
+      </Menu>
       <Content>
         <Subtitle>{elements.subtitle[0].text}</Subtitle>
       </Content>
     </Container>
   );
-}
+};
 
-export async function getServerSideProps() {
-  const home = await Client().getSingle('home', {});
+export async function getServerSideProps({preview = null, previewData = {}}: {preview: any; previewData: any}) {
+  const {ref} = previewData;
+  const home = await Client().getSingle('home', ref ? {ref} : {});
 
   return {
     props: {
-      elements: home.data
+      elements: home.data,
+      preview,
     },
-  }
+  };
 }
 
 export default Home;
