@@ -85,7 +85,7 @@ const Home = ({elements}: HomeProps) => {
   );
 }
 
-const getStaticProps = async (context: GetStaticPropsContext) => {
+export async function getServerSideProps() {
   const home = await Client().getSingle('home', {});
 
   return {
@@ -96,4 +96,3 @@ const getStaticProps = async (context: GetStaticPropsContext) => {
 }
 
 export default Home;
-export {getStaticProps}
