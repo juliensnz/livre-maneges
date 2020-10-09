@@ -5,9 +5,9 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import {Client} from '../prismic-configuration';
-import {LeafCollection} from '../component/Leaf';
-import {useElementSize} from '../hook/useElementSize';
-import {useLeafPoints} from '../hook/useLeafPoints';
+import {LeafCollection} from '../components/Leaf';
+import {useElementSize} from '../hooks/useElementSize';
+import {useLeafPoints} from '../hooks/useLeafPoints';
 
 const Container = styled.div`
   display: flex;

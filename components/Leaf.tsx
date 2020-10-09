@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 
-import {Size} from '../hook/useElementSize';
-import {Point} from '../hook/useLeafPoints';
+import {Size} from '../hooks/useElementSize';
+import {Point} from '../hooks/useLeafPoints';
 
 const Board = styled.div<{size: Size}>`
   overflow: visible;
@@ -16,18 +16,8 @@ const Board = styled.div<{size: Size}>`
 `;
 
 const bouquets = [
-  // [
-  //   <path
-  //     d="M67.25 50.62c0 7.09-1.06 27.77-4.3 32.77-4 6.17-7.06 10.87-13.69 10.87-5 0-8.41-6.54-12.1-10.33C32.05 78.69 28 64.11 28 54.92c0-15.83 9.67-37.73 21.69-37.73s17.56 17.6 17.56 33.43z"
-  //     fill="#fdd4d0"
-  //     opacity="0.7"
-  //   />,
-  //   <path
-  //     d="M66.16 76.15a25 25 0 01-3.77 13.5c-2.9 4.47-7.53 2.24-12.35 2.24-3.66 0-6.73 3.43-9.41.68-3.71-3.81-6.09-9.75-6.09-16.42 0-11.5 7.08-20.82 15.81-20.82s15.81 9.32 15.81 20.82z"
-  //     fill="#fd928c"
-  //     opacity="0.7"
-  //   />,
-  // ],
+  //
+
   [
     <>
       <path
