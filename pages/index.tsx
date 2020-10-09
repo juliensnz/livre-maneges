@@ -48,16 +48,7 @@ const MenuItem = styled.a`
   text-decoration: none;
   color: inherit;
 `;
-const Footer = styled.footer`
-  display: flex;
-  justify-content: center;
 
-  & > span {
-    margin: 0 10px;
-    line-height: 26px;
-    text-transform: uppercase;
-  }
-`;
 const Canvas = styled.canvas`
   overflow: visible;
   margin-left: 120px;

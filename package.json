@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "yarn convert && next dev",
+    "build": "yarn convert && next build",
+    "start": "next start",
+    "convert": "node ./leafs/convert.js"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.3",

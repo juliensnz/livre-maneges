@@ -20,7 +20,10 @@ const POSSIBLE_ANGLE = 0;
 const GAP_ANGLE = 30;
 const TIMING_MINIMUM = 4;
 const TIMING_RANDOMESS = 4;
-const LEAF_COUNT = 20;
+
+const LEAF_COUNT = 30;
+
+const FLOWER_BY_BOUQUET = 4;
 
 const createPoint = (coordinate: Coordinate, scale: number, bouquetIndex: number, leafIndex: number): Point => ({
   ...coordinate,
@@ -49,6 +52,7 @@ const getCoordinatesInText = (imageData: ImageData): Coordinate[] => {
       }
     }
   }
+  console.log(points.length);
 
   return points;
 };
@@ -56,7 +60,7 @@ const getCoordinatesInText = (imageData: ImageData): Coordinate[] => {
 const createBouquets = (coordinates: Coordinate[], scale: number) => {
   return [...new Array(LEAF_COUNT)].reduce((result: Point[], _, bouquetIndex): Point[] => {
     const coordinate = coordinates[Math.floor(Math.random() * coordinates.length)];
-    const newPoints = [...new Array(FLOWER_BY_BOUQUET)].map((_, leafIndex) =>
+    const newPoints = [...new Array(Math.floor(Math.random() * (FLOWER_BY_BOUQUET - 1)) + 2)].map((_, leafIndex) =>
       createPoint(coordinate, scale, bouquetIndex, leafIndex)
     );
 
@@ -64,7 +68,6 @@ const createBouquets = (coordinates: Coordinate[], scale: number) => {
   }, []);
 };
 
-const FLOWER_BY_BOUQUET = 4;
 const useLeafPoints = (subtitleSize: Size, subtitle: string): [React.Ref<HTMLCanvasElement>, Point[]] => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [leafPoints, setLeafPoints] = useState<Point[]>([]);

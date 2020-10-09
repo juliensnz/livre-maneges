@@ -56,10 +56,11 @@ const convertToReact = async (file, index, target) => {
     for (const index in files) {
       convertToReact(files[index], index, `./components/Leafs/Leaf${index}.js`);
     }
-    fs.writeFileSync('./components/Leafs/index.ts', `
+    fs.writeFileSync('./components/Leafs/index.tsx', `
+import React from 'react';
 ${files.map((_, index) => (`import Leaf${index} from './Leaf${index}';`)).join('\n')}
 
-export default [${files.map((_, index) => (`Leaf${index}`)).join(', ')}]`);
+export default [${files.map((_, index) => (`<Leaf${index} />`)).join(', ')}]`);
   } catch (e) {
     console.error(e);
   }
