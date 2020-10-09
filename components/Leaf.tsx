@@ -5,12 +5,22 @@ import {Size} from '../hooks/useElementSize';
 import {Point} from '../hooks/useLeafPoints';
 import Leafs from './Leafs';
 
-const Board = styled.div<{size: Size}>`
+const Container = styled.div`
+  width: 1000px;
+  height: 283px;
+  transform-origin: top left;
   overflow: visible;
   margin-left: 120px;
   margin-top: 160px;
-  width: ${(props) => props.size.width}px;
-  height: ${(props) => props.size.height}px;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+const Board = styled.div`
+  width: 1000px;
+  height: 283px;
+  transform-origin: top left;
+  overflow: visible;
   position: absolute;
   top: 0;
   left: 0;
@@ -18,7 +28,7 @@ const Board = styled.div<{size: Size}>`
 
 const bouquet = Leafs;
 
-const RotateLeaf = styled.g<{index: number; angle: number; gap: number; timing: number; isVisible: boolean}>`
+const RotateLeaf = styled.g<Point & {isVisible: boolean}>`
   @keyframes rotateLeaf${(props) => props.index} {
     from {
       transform: rotate(${(props) => props.angle}deg);
@@ -34,10 +44,10 @@ const RotateLeaf = styled.g<{index: number; angle: number; gap: number; timing: 
   transform-origin: 50px 95px;
 `;
 
-const ScaleLeaf = styled.g<{index: number; scale: number; timing: number; isVisible: boolean}>`
+const ScaleLeaf = styled.g<Point & {isVisible: boolean}>`
   transform: scale(${(props) => (props.isVisible ? props.scale : 0)});
-  transition: transform ${Math.floor(Math.random() * 10)}s ease-in-out;
-  transition-delay: ${(props) => Math.floor(Math.random() * props.index + 2)}s;
+  transition: transform ${(props) => props.growthLength}s ease-in-out;
+  transition-delay: ${(props) => props.growthLength}s;
   transform-origin: 50px 95px;
 `;
 
@@ -72,8 +82,8 @@ const Leaf = ({point, size}: LeafProps) => {
       scale={point.scale}
       key={point.x + point.y + point.index}
     >
-      <ScaleLeaf isVisible={isVisible} index={point.index} scale={point.scale} timing={point.timing}>
-        <RotateLeaf isVisible={isVisible} index={point.index} angle={point.angle} timing={point.timing} gap={point.gap}>
+      <ScaleLeaf isVisible={isVisible} {...point}>
+        <RotateLeaf isVisible={isVisible} {...point}>
           {bouquet[Math.floor(Math.random() * bouquet.length)]}
         </RotateLeaf>
       </ScaleLeaf>
@@ -88,11 +98,13 @@ type LeafCollectionProps = {
 
 const LeafCollection = ({size, leafPoints}: LeafCollectionProps) => {
   return (
-    <Board size={size}>
-      {leafPoints.map((point, index) => (
-        <Leaf key={point.index} point={point} size={size} />
-      ))}
-    </Board>
+    <Container style={{transform: `translate(0, ${(95 / 1250) * size.width}px)`}}>
+      <Board style={{transform: `scale(${size.width / 1000})`}}>
+        {leafPoints.map((point, index) => (
+          <Leaf key={point.index} point={point} size={size} />
+        ))}
+      </Board>
+    </Container>
   );
 };
 

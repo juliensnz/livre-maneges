@@ -1,13 +1,23 @@
 import {useEffect, useRef, useState} from 'react';
 import {Size} from './useElementSize';
 
-type Point = {x: number; y: number; timing: number; angle: number; gap: number; index: number; scale: number};
+type Point = {
+  x: number;
+  y: number;
+  growthLength: number;
+  growthDelay: number;
+  timing: number;
+  angle: number;
+  gap: number;
+  index: number;
+  scale: number;
+};
 
-const addText = (context: CanvasRenderingContext2D, text: string, size: Size) => {
+const addText = (context: CanvasRenderingContext2D, text: string) => {
   context.fillStyle = 'red';
-  context.clearRect(0, 0, size.width, size.height);
-  context.font = '13vw "Playfair Display"';
-  context.fillText(text.toUpperCase(), 0, size.height * 0.81);
+  context.clearRect(0, 0, 1000, 300);
+  context.font = '213px "Playfair Display"';
+  context.fillText(text.toUpperCase(), -5, 155);
 };
 
 const wait = async (time: number) => {
@@ -20,19 +30,26 @@ const POSSIBLE_ANGLE = 0;
 const GAP_ANGLE = 30;
 const TIMING_MINIMUM = 4;
 const TIMING_RANDOMESS = 4;
+const GROWTH_LENGTH = 8;
+const GROWTH_DELAY = 2;
 
 const LEAF_COUNT = 30;
 
 const FLOWER_BY_BOUQUET = 4;
 
-const createPoint = (coordinate: Coordinate, scale: number, bouquetIndex: number, leafIndex: number): Point => ({
-  ...coordinate,
-  timing: Math.floor(Math.random() * TIMING_RANDOMESS) + TIMING_MINIMUM,
-  angle: Math.floor(Math.random() * POSSIBLE_ANGLE),
-  gap: ((bouquetIndex % 2) * 2 - 1) * Math.floor(Math.random() * GAP_ANGLE),
-  scale: scale + Math.random() * scale,
-  index: bouquetIndex * FLOWER_BY_BOUQUET + leafIndex + 1,
-});
+const createPoint = (coordinate: Coordinate, scale: number, bouquetIndex: number, leafIndex: number): Point => {
+  const index = bouquetIndex * FLOWER_BY_BOUQUET + leafIndex + 1;
+  return {
+    ...coordinate,
+    timing: Math.floor(Math.random() * TIMING_RANDOMESS) + TIMING_MINIMUM,
+    growthLength: Math.floor(Math.random() * GROWTH_LENGTH + 4),
+    growthDelay: Math.floor(Math.random() * index + GROWTH_DELAY),
+    angle: Math.floor(Math.random() * POSSIBLE_ANGLE),
+    gap: ((bouquetIndex % 2) * 2 - 1) * Math.floor(Math.random() * GAP_ANGLE),
+    scale: scale + Math.random() * scale,
+    index,
+  };
+};
 
 const NUMBER_OF_COLORS = 4;
 type Coordinate = {x: number; y: number};
@@ -52,7 +69,6 @@ const getCoordinatesInText = (imageData: ImageData): Coordinate[] => {
       }
     }
   }
-  console.log(points.length);
 
   return points;
 };
@@ -68,12 +84,12 @@ const createBouquets = (coordinates: Coordinate[], scale: number) => {
   }, []);
 };
 
-const useLeafPoints = (subtitleSize: Size, subtitle: string): [React.Ref<HTMLCanvasElement>, Point[]] => {
+const useLeafPoints = (subtitle: string): [React.Ref<HTMLCanvasElement>, Point[]] => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [leafPoints, setLeafPoints] = useState<Point[]>([]);
 
   useEffect(() => {
-    if (0 !== subtitleSize.width && null !== canvasRef.current) {
+    if (null !== canvasRef.current) {
       const generatePoints = async () => {
         if (null === canvasRef.current) return;
 
@@ -81,11 +97,11 @@ const useLeafPoints = (subtitleSize: Size, subtitle: string): [React.Ref<HTMLCan
         const context = canvas.getContext('2d');
         if (null === context) return;
 
-        addText(context, subtitle, subtitleSize);
+        addText(context, subtitle);
 
         await wait(500);
 
-        addText(context, subtitle, subtitleSize);
+        addText(context, subtitle);
 
         const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         const coordinates = getCoordinatesInText(imageData);
@@ -97,7 +113,7 @@ const useLeafPoints = (subtitleSize: Size, subtitle: string): [React.Ref<HTMLCan
       };
       generatePoints();
     }
-  }, [subtitleSize.width, subtitleSize.height, canvasRef, setLeafPoints]);
+  }, [canvasRef, setLeafPoints]);
 
   return [canvasRef, leafPoints];
 };

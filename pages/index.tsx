@@ -78,7 +78,7 @@ type HomeProps = {
 
 const Home = ({elements}: HomeProps) => {
   const [subtitleRef, subtitleSize] = useElementSize();
-  const [canvasRef, leafPoints] = useLeafPoints(subtitleSize, elements.subtitle[0].text);
+  const [canvasRef, leafPoints] = useLeafPoints(elements.subtitle[0].text);
 
   return (
     <Container>
@@ -91,7 +91,7 @@ const Home = ({elements}: HomeProps) => {
       <Content>
         <Subtitle ref={subtitleRef}>{elements.subtitle[0].text}</Subtitle>
         <LeafCollection leafPoints={leafPoints} size={subtitleSize} />
-        <Canvas ref={canvasRef} width={`${subtitleSize.width}px`} height={`${subtitleSize.height}px`}></Canvas>
+        <Canvas ref={canvasRef} width="1000px" height="383px"></Canvas>
       </Content>
     </Container>
   );
