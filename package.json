@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "yarn convert && next dev",
+    "build": "yarn convert && next build",
+    "start": "next start",
+    "convert": "node ./leafs/convert.js"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.3",
@@ -16,8 +17,11 @@
     "styled-components": "^5.2.0"
   },
   "devDependencies": {
+    "@svgr/core": "^5.4.0",
     "@types/node": "^14.6.4",
     "@types/react": "^16.9.49",
-    "typescript": "^4.0.2"
+    "glob": "^7.1.6",
+    "typescript": "^4.0.2",
+    "xml2json": "^0.12.0"
   }
 }
