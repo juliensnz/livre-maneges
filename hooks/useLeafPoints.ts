@@ -35,7 +35,6 @@ const GAP_ANGLE = 30;
 const TIMING_MINIMUM = 4;
 const TIMING_RANDOMESS = 4;
 const GROWTH_LENGTH = 8;
-const GROWTH_DELAY = 2;
 
 const LEAF_COUNT = 30;
 
@@ -43,11 +42,12 @@ const FLOWER_BY_BOUQUET = 4;
 
 const createPoint = (coordinate: Coordinate, scale: number, bouquetIndex: number, leafIndex: number): Point => {
   const index = bouquetIndex * FLOWER_BY_BOUQUET + leafIndex + 1;
+  console.log(Math.floor((Math.random() * index) / 10));
   return {
     ...coordinate,
     timing: Math.floor(Math.random() * TIMING_RANDOMESS) + TIMING_MINIMUM,
     growthLength: Math.floor(Math.random() * GROWTH_LENGTH + 4),
-    growthDelay: Math.floor(Math.random() * index + GROWTH_DELAY),
+    growthDelay: Math.floor((Math.random() * index) / 10) * 5,
     angle: Math.floor(Math.random() * POSSIBLE_ANGLE),
     gap: ((bouquetIndex % 2) * 2 - 1) * Math.floor(Math.random() * GAP_ANGLE),
     scale: scale + Math.random() * scale,
@@ -102,7 +102,7 @@ const useLeafPoints = (subtitle: string, size: Size, style: StyleProps): Point[]
 
       addText(context, subtitle, size, style);
 
-      await wait(500);
+      await wait(200);
 
       addText(context, subtitle, size, style);
       const imageData = context.getImageData(0, 0, size.width, size.height);

@@ -32,7 +32,7 @@ const RotateLeaf = styled.g<Point & {isVisible: boolean}>`
 const ScaleLeaf = styled.g<Point & {isVisible: boolean}>`
   transform: scale(${(props) => (props.isVisible ? props.scale : 0)});
   transition: transform ${(props) => props.growthLength}s ease-in-out;
-  transition-delay: ${(props) => props.growthLength}s;
+  transition-delay: ${(props) => props.growthDelay}s;
   transform-origin: 50px 95px;
 `;
 
@@ -53,7 +53,7 @@ const Leaf = ({point, size}: LeafProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       display(true);
-    }, 500);
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);
@@ -83,6 +83,7 @@ type LeafCollectionProps = {
 };
 
 const LeafCollection = ({size, points, scale}: LeafCollectionProps) => {
+  console.log(points);
   return (
     <Container style={{width: `${size.width}px`, height: `${size.height}px`, transform: `scale(${scale})`}}>
       {points.map((point) => (
