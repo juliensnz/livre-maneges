@@ -26,26 +26,31 @@ const Title = styled.h1`
 
   font-family: 'Playfair Display', 'Times New Roman', Times, serif;
 `;
-const Subtitle = styled.h2`
-  /* font-family: 'Playfair Display', 'Times New Roman', Times, serif;
-  font-weight: normal;
-  font-size: 13vw;
-  text-transform: uppercase; */
-  /* margin-left: 120px;
-  margin-top: 160px;
-  position: absolute; */
-`;
+
 const Menu = styled.div`
   margin: 45px 45px 0 0;
   position: absolute;
   top: 0;
   right: 0;
+
+  @media screen and (max-width: 500px) {
+    top: auto;
+    right: auto;
+    bottom: 10px;
+    width: 100vw;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
 `;
 const MenuItem = styled.a`
   line-height: 20px;
   font-family: 'Raleway';
   text-transform: uppercase;
   text-decoration: none;
+  margin: 0 0 10px 0;
   color: inherit;
 `;
 
@@ -56,6 +61,11 @@ const Content = styled.div`
 const SubTitle = styled.div`
   margin-left: 8vw;
   margin-top: 9vw;
+
+  @media screen and (max-width: 500px) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 type PrismicElement = {
