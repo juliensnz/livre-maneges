@@ -21,7 +21,9 @@ const addText = (context: CanvasRenderingContext2D, text: string, size: Size, st
   context.clearRect(0, 0, size.width, size.height);
   context.font = `${style.fontSize} "${style.fontFamily}"`;
   context.textBaseline = 'middle';
-  context.fillText(text.toUpperCase(), 0, size.height / 1.75);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+  context.fillText(text.toUpperCase(), 0, size.height / (isSafari ? 2 : 1.75));
 };
 
 const wait = async (time: number) => {
@@ -42,7 +44,7 @@ const FLOWER_BY_BOUQUET = 4;
 
 const createPoint = (coordinate: Coordinate, scale: number, bouquetIndex: number, leafIndex: number): Point => {
   const index = bouquetIndex * FLOWER_BY_BOUQUET + leafIndex + 1;
-  console.log(Math.floor((Math.random() * index) / 10));
+
   return {
     ...coordinate,
     timing: Math.floor(Math.random() * TIMING_RANDOMESS) + TIMING_MINIMUM,
@@ -110,7 +112,6 @@ const useLeafPoints = (subtitle: string, size: Size, style: StyleProps): Point[]
       const scale = size.width / 3000;
       const points = createBouquets(coordinates, scale);
 
-      console.log('set leaf points');
       setLeafPoints(points);
     };
 

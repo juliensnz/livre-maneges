@@ -83,7 +83,6 @@ type LeafCollectionProps = {
 };
 
 const LeafCollection = ({size, points, scale}: LeafCollectionProps) => {
-  console.log(points);
   return (
     <Container style={{width: `${size.width}px`, height: `${size.height}px`, transform: `scale(${scale})`}}>
       {points.map((point) => (
