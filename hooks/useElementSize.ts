@@ -2,19 +2,24 @@ import {useEffect, useRef, useState} from 'react';
 
 type Size = {width: number; height: number};
 
-const useElementSize = (): [React.Ref<HTMLHeadingElement>, Size, (newSize: Size) => void] => {
-  const subtitleRef = useRef<HTMLHeadingElement>(null);
-  const [subtitleSize, setSubtitleSize] = useState({width: 0, height: 0});
+const useElementSize = (elementRef: React.RefObject<HTMLSpanElement>): [Size, Size] => {
+  const [elementSize, setElementSize] = useState({width: 0, height: 0});
+  const [initialElementSize, setInitialElementSize] = useState({width: 0, height: 0});
+  const initalized = useRef(false);
 
   useEffect(() => {
     const handleResize = () => {
-      if (null !== subtitleRef.current) {
-        if (subtitleRef.current.offsetHeight !== subtitleSize.height) {
-          setSubtitleSize({height: subtitleRef.current.offsetHeight, width: subtitleRef.current.offsetWidth});
+      if (null !== elementRef.current) {
+        if (elementRef.current.offsetHeight !== elementSize.height) {
+          setElementSize({height: elementRef.current.offsetHeight, width: elementRef.current.offsetWidth});
+
+          if (!initalized.current) {
+            setInitialElementSize({height: elementRef.current.offsetHeight, width: elementRef.current.offsetWidth});
+            initalized.current = true;
+          }
         }
       }
     };
-
     const timer = setTimeout(() => {
       handleResize();
     }, 1000);
@@ -25,9 +30,9 @@ const useElementSize = (): [React.Ref<HTMLHeadingElement>, Size, (newSize: Size)
       clearTimeout(timer);
       window.removeEventListener('resize', handleResize);
     };
-  }, [subtitleRef]);
+  }, [elementRef]);
 
-  return [subtitleRef, subtitleSize, setSubtitleSize];
+  return [elementSize, initialElementSize];
 };
 
 export {useElementSize};

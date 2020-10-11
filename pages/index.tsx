@@ -5,9 +5,9 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import {Client} from '../prismic-configuration';
-import {LeafCollection} from '../components/Leaf';
 import {useElementSize} from '../hooks/useElementSize';
 import {useLeafPoints} from '../hooks/useLeafPoints';
+import {Flowered} from '../components/Flowered';
 
 const Container = styled.div`
   display: flex;
@@ -27,13 +27,13 @@ const Title = styled.h1`
   font-family: 'Playfair Display', 'Times New Roman', Times, serif;
 `;
 const Subtitle = styled.h2`
-  font-family: 'Playfair Display', 'Times New Roman', Times, serif;
+  /* font-family: 'Playfair Display', 'Times New Roman', Times, serif;
   font-weight: normal;
   font-size: 13vw;
-  text-transform: uppercase;
-  margin-left: 120px;
+  text-transform: uppercase; */
+  /* margin-left: 120px;
   margin-top: 160px;
-  position: absolute;
+  position: absolute; */
 `;
 const Menu = styled.div`
   margin: 45px 45px 0 0;
@@ -49,18 +49,13 @@ const MenuItem = styled.a`
   color: inherit;
 `;
 
-const Canvas = styled.canvas`
-  overflow: visible;
-  margin-left: 120px;
-  margin-top: 160px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-`;
-
 const Content = styled.div`
   position: relative;
+`;
+
+const SubTitle = styled.div`
+  margin-left: 8vw;
+  margin-top: 9vw;
 `;
 
 type PrismicElement = {
@@ -77,9 +72,6 @@ type HomeProps = {
 };
 
 const Home = ({elements}: HomeProps) => {
-  const [subtitleRef, subtitleSize] = useElementSize();
-  const [canvasRef, leafPoints] = useLeafPoints(elements.subtitle[0].text);
-
   return (
     <Container>
       <Header>
@@ -89,9 +81,13 @@ const Home = ({elements}: HomeProps) => {
         <MenuItem href="mailto:bonjour@jadepiol.com?subject=Bonjour%20Jade">Contact</MenuItem>
       </Menu>
       <Content>
-        <Subtitle ref={subtitleRef}>{elements.subtitle[0].text}</Subtitle>
-        <LeafCollection leafPoints={leafPoints} size={subtitleSize} />
-        <Canvas ref={canvasRef} width="1000px" height="383px"></Canvas>
+        <SubTitle>
+          <Flowered
+            style={{fontFamily: 'Playfair Display', fontSize: '13vw', textTransform: 'uppercase', fontWeight: 'normal'}}
+          >
+            {elements.subtitle[0].text}
+          </Flowered>
+        </SubTitle>
       </Content>
     </Container>
   );

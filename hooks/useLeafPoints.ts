@@ -1,4 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
+import {StyleProps} from '../components/Flowered';
+import Leafs from '../components/Leafs';
 import {Size} from './useElementSize';
 
 type Point = {
@@ -11,13 +13,15 @@ type Point = {
   gap: number;
   index: number;
   scale: number;
+  leafIndex: number;
 };
 
-const addText = (context: CanvasRenderingContext2D, text: string) => {
+const addText = (context: CanvasRenderingContext2D, text: string, size: Size, style: StyleProps) => {
   context.fillStyle = 'red';
-  context.clearRect(0, 0, 1000, 300);
-  context.font = '213px "Playfair Display"';
-  context.fillText(text.toUpperCase(), -5, 155);
+  context.clearRect(0, 0, size.width, size.height);
+  context.font = `${style.fontSize} "${style.fontFamily}"`;
+  context.textBaseline = 'middle';
+  context.fillText(text.toUpperCase(), 0, size.height / 1.75);
 };
 
 const wait = async (time: number) => {
@@ -47,6 +51,7 @@ const createPoint = (coordinate: Coordinate, scale: number, bouquetIndex: number
     angle: Math.floor(Math.random() * POSSIBLE_ANGLE),
     gap: ((bouquetIndex % 2) * 2 - 1) * Math.floor(Math.random() * GAP_ANGLE),
     scale: scale + Math.random() * scale,
+    leafIndex: Math.floor(Math.random() * Leafs.length),
     index,
   };
 };
@@ -84,38 +89,38 @@ const createBouquets = (coordinates: Coordinate[], scale: number) => {
   }, []);
 };
 
-const useLeafPoints = (subtitle: string): [React.Ref<HTMLCanvasElement>, Point[]] => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const useLeafPoints = (subtitle: string, size: Size, style: StyleProps): Point[] => {
   const [leafPoints, setLeafPoints] = useState<Point[]>([]);
 
   useEffect(() => {
-    if (null !== canvasRef.current) {
-      const generatePoints = async () => {
-        if (null === canvasRef.current) return;
+    const generatePoints = async () => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      if (null === context) return;
+      canvas.width = size.width;
+      canvas.height = size.height;
 
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
-        if (null === context) return;
+      addText(context, subtitle, size, style);
 
-        addText(context, subtitle);
+      await wait(500);
 
-        await wait(500);
+      addText(context, subtitle, size, style);
+      const imageData = context.getImageData(0, 0, size.width, size.height);
+      const coordinates = getCoordinatesInText(imageData);
+      const scale = size.width / 3000;
+      const points = createBouquets(coordinates, scale);
 
-        addText(context, subtitle);
+      console.log('set leaf points');
+      setLeafPoints(points);
+    };
 
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const coordinates = getCoordinatesInText(imageData);
+    if (size.width === 0) return;
+    if (leafPoints.length !== 0) return;
 
-        const scale = canvas.width / 3000;
-        const points = createBouquets(coordinates, scale);
+    generatePoints();
+  }, [setLeafPoints, size, style]);
 
-        setLeafPoints(points);
-      };
-      generatePoints();
-    }
-  }, [canvasRef, setLeafPoints]);
-
-  return [canvasRef, leafPoints];
+  return leafPoints;
 };
 
 export {useLeafPoints};

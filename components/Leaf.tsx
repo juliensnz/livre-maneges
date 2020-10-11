@@ -6,24 +6,9 @@ import {Point} from '../hooks/useLeafPoints';
 import Leafs from './Leafs';
 
 const Container = styled.div`
-  width: 1000px;
-  height: 283px;
-  transform-origin: top left;
-  overflow: visible;
-  margin-left: 120px;
-  margin-top: 160px;
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
-const Board = styled.div`
-  width: 1000px;
-  height: 283px;
   transform-origin: top left;
   overflow: visible;
   position: absolute;
-  top: 0;
-  left: 0;
 `;
 
 const bouquet = Leafs;
@@ -84,7 +69,7 @@ const Leaf = ({point, size}: LeafProps) => {
     >
       <ScaleLeaf isVisible={isVisible} {...point}>
         <RotateLeaf isVisible={isVisible} {...point}>
-          {bouquet[Math.floor(Math.random() * bouquet.length)]}
+          {bouquet[point.leafIndex]}
         </RotateLeaf>
       </ScaleLeaf>
     </TranslateLeaf>
@@ -93,17 +78,16 @@ const Leaf = ({point, size}: LeafProps) => {
 
 type LeafCollectionProps = {
   size: Size;
-  leafPoints: Point[];
+  points: Point[];
+  scale: number;
 };
 
-const LeafCollection = ({size, leafPoints}: LeafCollectionProps) => {
+const LeafCollection = ({size, points, scale}: LeafCollectionProps) => {
   return (
-    <Container style={{transform: `translate(0, ${(95 / 1250) * size.width}px)`}}>
-      <Board style={{transform: `scale(${size.width / 1000})`}}>
-        {leafPoints.map((point, index) => (
-          <Leaf key={point.index} point={point} size={size} />
-        ))}
-      </Board>
+    <Container style={{width: `${size.width}px`, height: `${size.height}px`, transform: `scale(${scale})`}}>
+      {points.map((point) => (
+        <Leaf key={point.index} point={point} size={size} />
+      ))}
     </Container>
   );
 };
