@@ -6,9 +6,10 @@ import styled from 'styled-components';
 import {Client} from '../prismic-configuration';
 import {Flowered} from '../components/Flowered';
 
-const Container = styled.div`
+const Container = styled.div<{nightMode: boolean}>`
   display: flex;
   flex-direction: column;
+  ${(props) => (props.nightMode ? 'filter: invert(1)' : '')};
 `;
 const Header = styled.header`
   display: flex;
@@ -81,8 +82,10 @@ type HomeProps = {
 };
 
 const Home = ({elements}: HomeProps) => {
+  const nightMode = new Date().getHours() > 20 || new Date().getHours() < 7;
+
   return (
-    <Container>
+    <Container nightMode={nightMode}>
       <Header>
         <Title>{elements.title[0].text}</Title>
       </Header>
@@ -105,7 +108,6 @@ const Home = ({elements}: HomeProps) => {
 export async function getServerSideProps({preview = null, previewData = {}}: {preview: any; previewData: any}) {
   const {ref} = previewData;
   const home = await Client().getSingle('home', ref ? {ref} : {});
-
   return {
     props: {
       elements: home.data,

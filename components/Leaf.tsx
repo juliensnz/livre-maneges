@@ -9,6 +9,7 @@ const Container = styled.div`
   transform-origin: top left;
   overflow: visible;
   position: absolute;
+  filter: invert(1);
 `;
 
 const bouquet = Leafs;
