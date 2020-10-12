@@ -84,7 +84,7 @@ const Home = ({elements}: HomeProps) => {
   const nightMode = new Date().getHours() > 20 || new Date().getHours() < 7;
 
   return (
-    <Container nightMode={nightMode}>
+    <Container>
       <Header>
         <Title>{elements.title[0].text}</Title>
       </Header>
