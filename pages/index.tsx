@@ -1,12 +1,9 @@
 import React from 'react';
-import {GetStaticPropsContext} from 'next';
 import Link from 'next/link';
 
 import styled from 'styled-components';
 
 import {Client} from '../prismic-configuration';
-import {useElementSize} from '../hooks/useElementSize';
-import {useLeafPoints} from '../hooks/useLeafPoints';
 import {Flowered} from '../components/Flowered';
 
 const Container = styled.div`
@@ -65,6 +62,8 @@ const SubTitle = styled.div`
   @media screen and (max-width: 500px) {
     display: flex;
     justify-content: center;
+    margin-left: 0;
+    transform: scale(1.2);
   }
 `;
 
