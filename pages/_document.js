@@ -38,6 +38,8 @@ export default class MyDocument extends Document {
             crossOrigin=""
             rel="stylesheet"
           />
+          <title>Jade Piol</title>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
           <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180428184-1"></script>
           <script
             dangerouslySetInnerHTML={{

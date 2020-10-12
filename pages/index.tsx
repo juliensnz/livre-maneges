@@ -58,11 +58,17 @@ const Content = styled.div`
 const SubTitle = styled.div`
   margin-left: 8vw;
   margin-top: 9vw;
+  overflow: hidden;
 
   @media screen and (max-width: 500px) {
     display: flex;
     justify-content: center;
     margin-left: 0;
+  }
+`;
+
+const Scale = styled.div`
+  @media screen and (max-width: 500px) {
     transform: scale(1.2);
   }
 `;
@@ -81,8 +87,6 @@ type HomeProps = {
 };
 
 const Home = ({elements}: HomeProps) => {
-  const nightMode = new Date().getHours() > 20 || new Date().getHours() < 7;
-
   return (
     <Container>
       <Header>
@@ -93,11 +97,18 @@ const Home = ({elements}: HomeProps) => {
       </Menu>
       <Content>
         <SubTitle>
-          <Flowered
-            style={{fontFamily: 'Playfair Display', fontSize: '13vw', textTransform: 'uppercase', fontWeight: 'normal'}}
-          >
-            {elements.subtitle[0].text}
-          </Flowered>
+          <Scale>
+            <Flowered
+              style={{
+                fontFamily: 'Playfair Display',
+                fontSize: '13vw',
+                textTransform: 'uppercase',
+                fontWeight: 'normal',
+              }}
+            >
+              {elements.subtitle[0].text}
+            </Flowered>
+          </Scale>
         </SubTitle>
       </Content>
     </Container>
