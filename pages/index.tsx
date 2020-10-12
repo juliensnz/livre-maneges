@@ -6,10 +6,9 @@ import styled from 'styled-components';
 import {Client} from '../prismic-configuration';
 import {Flowered} from '../components/Flowered';
 
-const Container = styled.div<{nightMode: boolean}>`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
-  ${(props) => (props.nightMode ? 'filter: invert(1)' : '')};
 `;
 const Header = styled.header`
   display: flex;
