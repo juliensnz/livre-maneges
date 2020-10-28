@@ -38,20 +38,20 @@ export default class MyDocument extends Document {
             crossOrigin=""
             rel="stylesheet"
           />
-          <title>Jade Piol</title>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-          {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180428184-1"></script> */}
-          {/* <script
+          <title>Manèges conseil</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"/>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-NSTRHR6X1T"></script>
+          <script
             dangerouslySetInnerHTML={{
               __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
 
-                gtag('config', 'UA-180428184-1');
+                gtag('config', 'G-NSTRHR6X1T');
               `
             }}
-          /> */}
+          />
         </Head>
         <body>
           <Main />

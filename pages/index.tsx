@@ -1,26 +1,12 @@
 import React, {ChangeEvent, useState} from 'react';
 import Link from 'next/link';
-import { Button, FormCheckbox, Form, FormGroup, FormSelect, Card, CardImg, CardBody } from 'shards-react';
+import { Button, FormCheckbox, Form, FormGroup, FormSelect, FormInput, Card, CardImg, CardBody } from 'shards-react';
 import styled from 'styled-components';
-
+import {Title, Description, Logo, Header, Container} from '../components'
 import {Client} from '../prismic-configuration';
 import {formatAmountForDisplay} from '../utils/stripe-helpers';
 import getStripe from '../utils/get-stripejs';
 import {fetchPostJSON} from '../utils/api-helpers';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const Header = styled.header`
-  display: flex;
-`;
-const Logo = styled.img`
-  width: 200px;
-  margin: 2em;
-  height: auto;
-`;
 
 const CheckoutForm = styled(Form)`
   display: flex;
@@ -35,7 +21,7 @@ const Cart = styled(Card)`
 
 const CoverContainer = styled.div`
   display: flex;
-  padding: 2rem;
+  padding: 2rem 2rem 1rem 2rem;
   display: flex;
   justify-content: center;
 `
@@ -44,21 +30,12 @@ const CoverContainer = styled.div`
 const Cover = styled(CardImg)`
   height: 300px;
   border: 1px solid #999;
-  border-radius: 3px;
+  border-radius: 5px;
 `
 
 const Label = styled.label`
-
 `
 const Option = styled.option`
-
-`
-
-const Description = styled.div`
-  margin: 0 0 2em 0;
-`
-const Title = styled.h2`
-  font-size: 1.8rem;
 `
 
 const Buy = styled(Button)`
@@ -66,7 +43,9 @@ const Buy = styled(Button)`
   padding: .75rem 2rem;
 `
 
-const Total = styled.div``
+const Total = styled.div`
+  margin-top: 1em;
+`
 
 type PrismicElement = {
   type: string;
@@ -88,6 +67,7 @@ const Home = ({elements}: HomeProps) => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setLoading] = useState(false);
   const [needInvoice, setNeedInvoice] = useState(false);
+  const [needCustomQuantity, setNeedCustomQuantity] = useState(false);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
@@ -120,7 +100,7 @@ const Home = ({elements}: HomeProps) => {
   return (
     <Container>
       <Header>
-        <Logo src="http://www.maneges-conseil.fr/wp-content/uploads/2014/09/logo_maneges2-300x82.jpg" />
+        <Logo src="/assets/logo.jpg" />
       </Header>
       <Cart style={{ maxWidth: '600px'}}>
         <CoverContainer>
@@ -128,34 +108,53 @@ const Home = ({elements}: HomeProps) => {
         </CoverContainer>
         <CardBody>
           <Title>{elements.title[0].text}</Title>
-          <Description>{elements.description[0].text}</Description>
+          <Description>{elements.description[0].text.split('\n').map((text: string, index: number) => (<span key={index}>{text}<br/></span>))}</Description>
           <CheckoutForm onSubmit={handleSubmit}>
-            <FormGroup>
-              <Label htmlFor="quantity">Quantité</Label>
-              <FormSelect id="quantity" value={quantity} onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-                setQuantity(Number(event.currentTarget.value));
-              }}>
-                <Option value={1}>1</Option>
-                <Option value={2}>2</Option>
-                <Option value={3}>3</Option>
-                <Option value={4}>4</Option>
-                <Option value={5}>5</Option>
-                <Option value={10}>10</Option>
-                <Option value={15}>15</Option>
-                <Option value={20}>20</Option>
-              </FormSelect>
-            </FormGroup>
+
+            {!needCustomQuantity ? (
+              <FormGroup>
+                <Label htmlFor="quantity-select">Quantité</Label>
+                <FormSelect id="quantity-select" value={quantity} onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                  if ('custom' === event.currentTarget.value) {
+                    setQuantity(20);
+                    setNeedCustomQuantity(true);
+                  } else {
+                    setQuantity(Number(event.currentTarget.value));
+                    setNeedCustomQuantity(false);
+                  }
+                }}>
+                  <Option key="1" value={1}>1</Option>
+                  <Option key="2" value={2}>2</Option>
+                  <Option key="3" value={3}>3</Option>
+                  <Option key="4" value={4}>4</Option>
+                  <Option key="5" value={5}>5</Option>
+                  <Option key="10" value={10}>10</Option>
+                  <Option key="custom" value="custom">Grand volumes</Option>
+                </FormSelect>
+              </FormGroup>
+            ) : (
+              <FormGroup>
+                <Label htmlFor="quantity-input">Quantité</Label>
+                <FormInput id="quantity-input" type="number" step={1} min={1} value={quantity} onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                  const value = Number(event.currentTarget.value);
+
+                  if (typeof(value) === 'number' && value !== NaN && Math.round(value) === value && value > 0) {
+                    setQuantity(Number(event.currentTarget.value));
+                  }
+                }} />
+              </FormGroup>
+            )}
             <FormCheckbox
+              id="need-invoice-input"
               checked={needInvoice}
               onChange={(event: ChangeEvent<HTMLInputElement>) => setNeedInvoice(!needInvoice)}
             >
               J'ai besoin d'une facture
             </FormCheckbox>
-            <Total>Total: {formatAmountForDisplay(quantity*PRICE, 'EUR')}</Total>
-            <Buy pill type="submit" disabled={isLoading}>Acheter</Buy>
+            <Total><strong>Total:</strong> {formatAmountForDisplay(quantity*PRICE, 'EUR')}</Total>
+            <Buy pill type="submit" disabled={isLoading}>{!isLoading ? 'Acheter' : 'Chargement...'}</Buy>
           </CheckoutForm>
         </CardBody>
-
       </Cart>
     </Container>
   );

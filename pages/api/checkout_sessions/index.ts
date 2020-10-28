@@ -4,7 +4,6 @@ import { formatAmountForStripe } from '../../../utils/stripe-helpers'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  // https://github.com/stripe/stripe-node#configuration
   apiVersion: '2020-08-27',
 })
 
@@ -14,6 +13,8 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const quantity: number = Number(req.body.quantity)
+    const needInvoice = req.body.needInvoice ? "Demande une facture" : "Ne demande pas de facture"
+
     try {
       // Create Checkout Sessions from body params.
       const params: Stripe.Checkout.SessionCreateParams = {
@@ -22,17 +23,20 @@ export default async function handler(
         line_items: [
           {
             name: 'Livre de la conférence Maneges',
-            amount: formatAmountForStripe(Number(process.env.PRICE!) * quantity, process.env.CURRENCY!),
+            amount: formatAmountForStripe(Number(process.env.PRICE!), process.env.CURRENCY!),
             currency: process.env.CURRENCY,
             quantity,
           },
         ],
         billing_address_collection: 'required',
         shipping_address_collection: {
-          allowed_countries: ['FR', 'BE', 'CH']
+          allowed_countries: ['FR']
+        },
+        metadata: {
+          needInvoice
         },
         success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}/pay-with-checkout`,
+        cancel_url: `${req.headers.origin}/`,
       }
       const checkoutSession: Stripe.Checkout.Session = await stripe.checkout.sessions.create(
         params

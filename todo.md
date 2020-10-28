@@ -1,6 +1,7 @@
-- style
-- ajouter custo prismic pour le checkout stripe
+- style [DONE]
+- ajouter custo prismic pour le checkout stripe [DONE]
 - page de confirmation
-- cancel page
+- cancel page [DONE]
 - google analytics
 - demande de facture
+- Logo lien
