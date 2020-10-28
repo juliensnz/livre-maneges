@@ -1,0 +1,5 @@
+- style
+- ajouter custo prismic pour le checkout stripe
+- page de confirmation
+- cancel page
+- google analytics
