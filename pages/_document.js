@@ -32,14 +32,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="fr">
         <Head>
-          <link
-            rel="preload"
-            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway&display=swap"
-            crossOrigin=""
-            rel="stylesheet"
-          />
-          <title>Manèges conseil</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"/>
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-NSTRHR6X1T"></script>
           <script
             dangerouslySetInnerHTML={{

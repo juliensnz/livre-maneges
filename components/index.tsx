@@ -14,7 +14,7 @@ const LogoImg = styled.img`
 `;
 
 const Logo = ({src}: {src: string}) => (<a href="http://maneges-conseil.fr">
-  <LogoImg src={src} />
+  <LogoImg src={src} width="297" height="80"/>
 </a>)
 
 

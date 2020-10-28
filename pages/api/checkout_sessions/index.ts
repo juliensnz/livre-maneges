@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { formatAmountForStripe } from '../../../utils/stripe-helpers'
 import Stripe from 'stripe'
+import {Client} from '../../../prismic-configuration';
+import {Article} from '../..';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2020-08-27',
@@ -11,9 +13,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const element = await Client().getByUID('article', 'livre-conference', {});
+  const article: Article = element.data;
+
   if (req.method === 'POST') {
     const quantity: number = Number(req.body.quantity)
-    const needInvoice = req.body.needInvoice ? "Demande une facture" : "Ne demande pas de facture"
+    const needInvoice = req.body.needInvoice;
 
     try {
       // Create Checkout Sessions from body params.
@@ -22,8 +27,8 @@ export default async function handler(
         payment_method_types: ['card'],
         line_items: [
           {
-            name: 'Livre de la conférence Maneges',
-            amount: formatAmountForStripe(Number(process.env.PRICE!), process.env.CURRENCY!),
+            name: article.name[0].text,
+            amount: formatAmountForStripe(Number(article.price), process.env.CURRENCY!),
             currency: process.env.CURRENCY,
             quantity,
           },
@@ -33,7 +38,8 @@ export default async function handler(
           allowed_countries: ['FR']
         },
         metadata: {
-          needInvoice
+          needInvoice,
+          article: element.uid!
         },
         success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/`,

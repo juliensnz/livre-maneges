@@ -7,6 +7,7 @@ import {Client} from '../prismic-configuration';
 import {formatAmountForDisplay} from '../utils/stripe-helpers';
 import getStripe from '../utils/get-stripejs';
 import {fetchPostJSON} from '../utils/api-helpers';
+import Head from 'next/Head';
 
 const CheckoutForm = styled(Form)`
   display: flex;
@@ -47,21 +48,27 @@ const Total = styled.div`
   margin-top: 1em;
 `
 
-type PrismicElement = {
+type Article = {
+  title: [PrismicTextElement];
+  name: [PrismicTextElement];
+  itemtitle: [PrismicTextElement];
+  description: [PrismicTextElement];
+  cover: PrismicMediaElement;
+  price: number;
+}
+type PrismicTextElement = {
   type: string;
   text: string;
   spans: any[];
 };
-
-type HomeProps = {
-  elements: {
-    title: [PrismicElement];
-    itemtitle: [PrismicElement];
-    description: [PrismicElement];
-  };
+type PrismicMediaElement = {
+  url: string;
+  alt: string;
 };
 
-const PRICE = 14.90
+type HomeProps = {
+  elements: Article;
+};
 
 const Home = ({elements}: HomeProps) => {
   const [quantity, setQuantity] = useState(1);
@@ -99,12 +106,16 @@ const Home = ({elements}: HomeProps) => {
 
   return (
     <Container>
+      <Head>
+          <title>Manèges conseil - {elements.title[0].text}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"/>
+      </Head>
       <Header>
         <Logo src="/assets/logo.jpg" />
       </Header>
       <Cart style={{ maxWidth: '600px'}}>
         <CoverContainer>
-          <Cover src="/assets/cover.jpg" />
+          <Cover src={elements.cover.url} alt={elements.cover.alt} width="214" height="300"/>
         </CoverContainer>
         <CardBody>
           <Title>{elements.title[0].text}</Title>
@@ -151,7 +162,7 @@ const Home = ({elements}: HomeProps) => {
             >
               J'ai besoin d'une facture
             </FormCheckbox>
-            <Total><strong>Total:</strong> {formatAmountForDisplay(quantity*PRICE, 'EUR')}</Total>
+            <Total><strong>Total:</strong> {formatAmountForDisplay(quantity * elements.price, 'EUR')}</Total>
             <Buy pill type="submit" disabled={isLoading}>{!isLoading ? 'Acheter' : 'Chargement...'}</Buy>
           </CheckoutForm>
         </CardBody>
@@ -162,14 +173,15 @@ const Home = ({elements}: HomeProps) => {
 
 export async function getServerSideProps({preview = null, previewData = {}}: {preview: any; previewData: any}) {
   const {ref} = previewData;
-  const home = await Client().getSingle('home', ref ? {ref} : {});
+  const article = await Client().getByUID('article', 'livre-conference', ref ? {ref} : {});
 
   return {
     props: {
-      elements: home.data,
+      elements: article.data,
       preview,
     },
   };
 }
 
 export default Home;
+export type {Article}
