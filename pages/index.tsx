@@ -57,8 +57,8 @@ const Option = styled.option`
 const Description = styled.div`
   margin: 0 0 2em 0;
 `
-const ItemTitle = styled.h2`
-
+const Title = styled.h2`
+  font-size: 1.8rem;
 `
 
 const Buy = styled(Button)`
@@ -127,7 +127,7 @@ const Home = ({elements}: HomeProps) => {
           <Cover src="/assets/cover.jpg" />
         </CoverContainer>
         <CardBody>
-          <ItemTitle>{elements.itemtitle[0].text}</ItemTitle>
+          <Title>{elements.title[0].text}</Title>
           <Description>{elements.description[0].text}</Description>
           <CheckoutForm onSubmit={handleSubmit}>
             <FormGroup>
