@@ -40,8 +40,8 @@ export default class MyDocument extends Document {
           />
           <title>Jade Piol</title>
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180428184-1"></script>
-          <script
+          {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180428184-1"></script> */}
+          {/* <script
             dangerouslySetInnerHTML={{
               __html: `
                 window.dataLayer = window.dataLayer || [];
@@ -51,7 +51,7 @@ export default class MyDocument extends Document {
                 gtag('config', 'UA-180428184-1');
               `
             }}
-          />
+          /> */}
         </Head>
         <body>
           <Main />
