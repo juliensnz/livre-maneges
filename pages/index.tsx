@@ -139,7 +139,7 @@ const Home = ({elements}: HomeProps) => {
                   <Option key="4" value={4}>4</Option>
                   <Option key="5" value={5}>5</Option>
                   <Option key="10" value={10}>10</Option>
-                  <Option key="custom" value="custom">Grand volumes</Option>
+                  <Option key="custom" value="custom">Grands volumes</Option>
                 </FormSelect>
               </FormGroup>
             ) : (
