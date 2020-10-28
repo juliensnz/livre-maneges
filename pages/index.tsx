@@ -1,5 +1,4 @@
 import React, {ChangeEvent, useState} from 'react';
-import Link from 'next/link';
 import { Button, FormCheckbox, Form, FormGroup, FormSelect, FormInput, Card, CardImg, CardBody } from 'shards-react';
 import styled from 'styled-components';
 import {Title, Description, Logo, Header, Container} from '../components'
@@ -7,7 +6,7 @@ import {Client} from '../prismic-configuration';
 import {formatAmountForDisplay} from '../utils/stripe-helpers';
 import getStripe from '../utils/get-stripejs';
 import {fetchPostJSON} from '../utils/api-helpers';
-import Head from 'next/Head';
+import Head from 'next/head';
 
 const CheckoutForm = styled(Form)`
   display: flex;
