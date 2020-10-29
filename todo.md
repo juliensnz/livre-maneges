@@ -5,3 +5,5 @@
 - google analytics [DONE]
 - demande de facture [DONE]
 - Logo lien [DONE]
+- alt on all images
+- facebook integration
