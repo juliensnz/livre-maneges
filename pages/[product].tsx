@@ -63,7 +63,7 @@ type PrismicMediaElement = {
 };
 
 type HomeProps = {
-  product: Article;
+  product: Article | null;
   productId: string;
 };
 
@@ -101,6 +101,8 @@ const Home = ({product, productId}: HomeProps) => {
     console.warn(error.message);
     setLoading(false);
   };
+
+  if (null === product) return null;
 
   return (
     <Container>
@@ -175,6 +177,9 @@ const Home = ({product, productId}: HomeProps) => {
                   min={1}
                   value={quantity}
                   onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                    if ('' === event.currentTarget.value) {
+                      setQuantity(1);
+                    }
                     const value = Number(event.currentTarget.value);
 
                     if (typeof value === 'number' && value !== NaN && Math.round(value) === value && value > 0) {
@@ -215,6 +220,16 @@ export async function getServerSideProps({
 }) {
   const {ref} = previewData;
   const product = await Client().getByUID('article', productId, ref ? {ref} : {});
+
+  if (undefined === product) {
+    return {
+      props: {
+        product: null,
+        productId: '',
+        preview: null,
+      },
+    };
+  }
 
   return {
     props: {
