@@ -146,6 +146,9 @@ const Home = ({elements}: HomeProps) => {
               <FormGroup>
                 <Label htmlFor="quantity-input">Quantité</Label>
                 <FormInput id="quantity-input" type="number" step={1} min={1} value={quantity} onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                  if ('' === event.currentTarget.value) {
+                    setQuantity(1);
+                  }
                   const value = Number(event.currentTarget.value);
 
                   if (typeof(value) === 'number' && value !== NaN && Math.round(value) === value && value > 0) {
