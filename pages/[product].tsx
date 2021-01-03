@@ -7,7 +7,6 @@ import {formatAmountForDisplay} from '../utils/stripe-helpers';
 import getStripe from '../utils/get-stripejs';
 import {fetchPostJSON} from '../utils/api-helpers';
 import Head from 'next/head';
-import {useRouter} from 'next/router';
 
 const CheckoutForm = styled(Form)`
   display: flex;
@@ -64,10 +63,11 @@ type PrismicMediaElement = {
 };
 
 type HomeProps = {
-  elements: Article;
+  product: Article;
+  productId: string;
 };
 
-const Home = ({elements}: HomeProps) => {
+const Home = ({product, productId}: HomeProps) => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setLoading] = useState(false);
   const [needInvoice, setNeedInvoice] = useState(false);
@@ -79,6 +79,7 @@ const Home = ({elements}: HomeProps) => {
     // Create a Checkout Session.
     const response = await fetchPostJSON('/api/checkout_sessions', {
       quantity,
+      productId,
     });
 
     if (response.statusCode === 500) {
@@ -104,7 +105,7 @@ const Home = ({elements}: HomeProps) => {
   return (
     <Container>
       <Head>
-        <title>Manèges conseil - {elements.title[0].text}</title>
+        <title>Manèges conseil - {product.title[0].text}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
       </Head>
       <Header>
@@ -112,12 +113,12 @@ const Home = ({elements}: HomeProps) => {
       </Header>
       <Cart style={{maxWidth: '600px'}}>
         <CoverContainer>
-          <Cover src={elements.cover.url} alt={elements.cover.alt} width="214" height="300" />
+          <Cover src={product.cover.url} alt={product.cover.alt} width="214" height="300" />
         </CoverContainer>
         <CardBody>
-          <Title>{elements.title[0].text}</Title>
+          <Title>{product.title[0].text}</Title>
           <Description>
-            {elements.description[0].text.split('\n').map((text: string, index: number) => (
+            {product.description[0].text.split('\n').map((text: string, index: number) => (
               <span key={index}>
                 {text}
                 <br />
@@ -174,9 +175,6 @@ const Home = ({elements}: HomeProps) => {
                   min={1}
                   value={quantity}
                   onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-                    if ('' === event.currentTarget.value) {
-                      setQuantity(1);
-                    }
                     const value = Number(event.currentTarget.value);
 
                     if (typeof value === 'number' && value !== NaN && Math.round(value) === value && value > 0) {
@@ -194,7 +192,7 @@ const Home = ({elements}: HomeProps) => {
               J'ai besoin d'une facture
             </FormCheckbox>
             <Total>
-              <strong>Total:</strong> {formatAmountForDisplay(quantity * elements.price, 'EUR')}
+              <strong>Total:</strong> {formatAmountForDisplay(quantity * product.price, 'EUR')}
             </Total>
             <Buy pill type="submit" disabled={isLoading}>
               {!isLoading ? 'Acheter' : 'Chargement...'}
@@ -209,18 +207,19 @@ const Home = ({elements}: HomeProps) => {
 export async function getServerSideProps({
   preview = null,
   previewData = {},
-  ...rest
+  query: {product: productId},
 }: {
   preview: any;
   previewData: any;
+  query: {product: string};
 }) {
-  console.log(rest);
   const {ref} = previewData;
-  const article = await Client().getByUID('article', 'livre-conference', ref ? {ref} : {});
+  const product = await Client().getByUID('article', productId, ref ? {ref} : {});
 
   return {
     props: {
-      elements: article.data,
+      product: product.data,
+      productId,
       preview,
     },
   };
